@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('slots', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('editor_id')->constrained('users')->cascadeOnDelete(); // психолог
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->boolean('is_booked')->default(false);
+            $table->timestamps();
+
+            $table->unique(['editor_id', 'date', 'start_time']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('slots');
+    }
+};

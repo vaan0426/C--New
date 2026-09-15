@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap');
+@import 'tailwindcss';
+
+/*
+ * Design tokens — spec §9 "Визуална идентичност".
+ * Dark, cinematic, warm palette; serif display type paired with a clean sans body.
+ */
+@theme {
+  --color-bg: #171310;
+  --color-surface: #211b16;
+  --color-divider: #3a312a;
+  --color-ink: #d9c7b0;
+  --color-ink-muted: #8a7860;
+  --color-accent: #b8874a;
+  --color-cream: #eadfcb;
+
+  --font-display: 'Cormorant Garamond', 'Georgia', serif;
+  --font-sans: 'Poppins', system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
