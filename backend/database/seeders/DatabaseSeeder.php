@@ -93,5 +93,27 @@ class DatabaseSeeder extends Seeder
             'price' => 40,
             'capacity' => 12,
         ]);
+
+        Event::create([
+            'editor_id' => $editor->id,
+            'help_type_id' => $helpTypes[1]->id,
+            'title' => 'Работилница за двойки',
+            'slug' => 'rabotilnica-za-dvoiki-'.Str::random(4),
+            'description' => 'Половин ден, посветен на комуникацията в двойката.',
+            'starts_at' => now()->addDays(17)->setTime(11, 0),
+            'price' => 90,
+            'capacity' => 8,
+        ]);
+
+        Event::create([
+            'editor_id' => $editor->id,
+            'help_type_id' => $helpTypes[2]->id,
+            'title' => 'Ден на осъзнатостта',
+            'slug' => 'den-na-osaznatostta-'.Str::random(4),
+            'description' => 'Практически упражнения за женска подкрепа и себепознание.',
+            'starts_at' => now()->addDays(24)->setTime(10, 0),
+            'price' => 55,
+            'capacity' => 15,
+        ]);
     }
 }

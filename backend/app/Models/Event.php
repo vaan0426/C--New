@@ -13,6 +13,8 @@ class Event extends Model
 {
     use HasFactory;
 
+    protected $appends = ['spots_left'];
+
     protected function casts(): array
     {
         return [

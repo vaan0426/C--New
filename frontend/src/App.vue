@@ -11,7 +11,7 @@ const route = useRoute()
 <template>
   <div class="flex min-h-screen flex-col bg-bg text-ink">
     <SiteHeader v-if="!route.meta.requiresStaff" :auth="auth" />
-    <main class="flex-1">
+    <main class="flex-1" :class="{ 'pt-20': !route.meta.requiresStaff && route.name !== 'home' }">
       <RouterView />
     </main>
     <SiteFooter v-if="!route.meta.requiresStaff" />

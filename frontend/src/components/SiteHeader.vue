@@ -1,10 +1,21 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 defineProps({ auth: { type: Object, required: true } })
 
 const open = ref(false)
+const scrolled = ref(false)
+
+function onScroll() {
+  scrolled.value = window.scrollY > 40
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+})
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 const navLinks = [
   { label: 'За мен', href: '/#about' },
@@ -16,7 +27,10 @@ const navLinks = [
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 border-b border-divider/70 bg-bg/90 backdrop-blur">
+  <header
+    class="fixed inset-x-0 top-0 z-40 transition-colors duration-500"
+    :class="scrolled ? 'border-b border-divider/70 bg-bg/95 backdrop-blur' : 'border-b border-transparent bg-gradient-to-b from-black/50 to-transparent'"
+  >
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <RouterLink to="/" class="flex items-center gap-3">
         <span
@@ -59,7 +73,7 @@ const navLinks = [
       </button>
     </div>
 
-    <div v-if="open" class="border-t border-divider/70 px-6 py-4 md:hidden">
+    <div v-if="open" class="border-t border-divider/70 bg-bg px-6 py-4 md:hidden">
       <nav class="flex flex-col gap-4 text-sm text-ink-muted">
         <a v-for="link in navLinks" :key="link.href" :href="link.href" @click="open = false">{{ link.label }}</a>
         <RouterLink v-if="!auth.isAuthenticated" to="/login" @click="open = false">Вход</RouterLink>

@@ -31,3 +31,68 @@ body {
 .font-display {
   font-family: var(--font-display);
 }
+
+/*
+ * "Photo" placeholder system.
+ *
+ * This build has no access to real photography (offline sandbox), so every
+ * spot that wants a photo (spec §9.4: warm, golden-hour, authentic) uses a
+ * textured gradient surface instead — same aspect ratio, same treatment
+ * (grain, vignette, burned-in caption) a real photo would get. Swap the
+ * background-image for an <img> or CSS background url() later; layout and
+ * caption styling stay identical.
+ */
+.photo {
+  /* Position is deliberately NOT set here: Tailwind's `relative`/`absolute`
+     utility on the element would lose to this unlayered rule under the
+     cascade-layer order, collapsing the element (inset-* needs a positioned
+     el). Always pair `.photo` with `relative` or `absolute` in the markup. */
+  overflow: hidden;
+  background-color: var(--color-surface);
+  isolation: isolate;
+}
+
+.photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, transparent 45%, rgba(10, 8, 6, 0.4) 100%);
+  pointer-events: none;
+}
+
+.photo--1 { background-image: linear-gradient(135deg, #5c4025 0%, #a2703a 45%, #33240f 100%); }
+.photo--2 { background-image: linear-gradient(160deg, #40301f 0%, #a67840 55%, #201810 100%); }
+.photo--3 { background-image: linear-gradient(145deg, #2a2117 0%, #6e4c2c 45%, #c99a58 130%); }
+.photo--4 { background-image: linear-gradient(200deg, #46341f 0%, #8a5f30 55%, #241c12 100%); }
+.photo--5 { background-image: radial-gradient(ellipse at 30% 20%, #b6844a 0%, #46331e 55%, #1c1712 100%); }
+.photo--6 { background-image: linear-gradient(120deg, #332615 0%, #93683a 50%, #211a10 100%); }
+
+.photo-caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 1.5rem;
+  background: linear-gradient(0deg, rgba(10, 8, 6, 0.85) 0%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ken-burns {
+    animation: ken-burns 16s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes ken-burns {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to { transform: scale(1.08) translate3d(-1%, -1%, 0); }
+}
