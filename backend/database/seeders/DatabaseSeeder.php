@@ -9,6 +9,7 @@ use App\Models\Slot;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -21,23 +22,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::factory()->create([
+        // forceCreate(), not User::factory()/create(): the factory's
+        // definition() calls fake() (fakerphp/faker), which composer install
+        // --no-dev strips from the production image, crashing the seeder on
+        // every deploy; and 'role'/'status'/'email_verified_at' aren't in
+        // the model's (deliberately narrow, register()-safe) $fillable list,
+        // so a plain create() would silently drop them.
+        $password = Hash::make('password');
+
+        $admin = User::forceCreate([
             'name' => 'Admin',
             'email' => 'admin@example.com',
+            'password' => $password,
             'role' => User::ROLE_ADMIN,
             'email_verified_at' => now(),
         ]);
 
-        $editor = User::factory()->create([
+        $editor = User::forceCreate([
             'name' => 'Психолог',
             'email' => 'editor@example.com',
+            'password' => $password,
             'role' => User::ROLE_EDITOR,
             'email_verified_at' => now(),
         ]);
 
-        User::factory()->create([
+        User::forceCreate([
             'name' => 'Test User',
             'email' => 'user@example.com',
+            'password' => $password,
             'role' => User::ROLE_USER,
             'email_verified_at' => now(),
         ]);
