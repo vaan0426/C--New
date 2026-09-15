@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from 'vue-router'
+
 const year = new Date().getFullYear()
 </script>
 
@@ -22,10 +24,10 @@ const year = new Date().getFullYear()
       <div>
         <h3 class="font-display text-lg italic text-cream">Навигация</h3>
         <ul class="mt-4 space-y-2 text-sm text-ink-muted">
-          <li><a href="/#about" class="hover:text-cream">За мен</a></li>
-          <li><a href="/#services" class="hover:text-cream">Услуги</a></li>
-          <li><a href="/#packages" class="hover:text-cream">Пакети</a></li>
-          <li><a href="/#events" class="hover:text-cream">Събития</a></li>
+          <li><RouterLink :to="{ path: '/', hash: '#about' }" class="hover:text-cream">За мен</RouterLink></li>
+          <li><RouterLink :to="{ path: '/', hash: '#services' }" class="hover:text-cream">Услуги</RouterLink></li>
+          <li><RouterLink :to="{ path: '/', hash: '#packages' }" class="hover:text-cream">Пакети</RouterLink></li>
+          <li><RouterLink :to="{ path: '/', hash: '#events' }" class="hover:text-cream">Събития</RouterLink></li>
         </ul>
       </div>
 

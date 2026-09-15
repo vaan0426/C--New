@@ -18,11 +18,11 @@ onMounted(() => {
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 const navLinks = [
-  { label: 'За мен', href: '/#about' },
-  { label: 'Услуги', href: '/#services' },
-  { label: 'Пакети', href: '/#packages' },
-  { label: 'Събития', href: '/#events' },
-  { label: 'Контакти', href: '/#contact' },
+  { label: 'За мен', to: { path: '/', hash: '#about' } },
+  { label: 'Услуги', to: { path: '/', hash: '#services' } },
+  { label: 'Пакети', to: { path: '/', hash: '#packages' } },
+  { label: 'Събития', to: { path: '/', hash: '#events' } },
+  { label: 'Контакти', to: { path: '/', hash: '#contact' } },
 ]
 </script>
 
@@ -42,9 +42,9 @@ const navLinks = [
       </RouterLink>
 
       <nav class="hidden items-center gap-8 text-sm tracking-wide text-ink-muted md:flex">
-        <a v-for="link in navLinks" :key="link.href" :href="link.href" class="transition hover:text-cream">
+        <RouterLink v-for="link in navLinks" :key="link.label" :to="link.to" class="transition hover:text-cream">
           {{ link.label }}
-        </a>
+        </RouterLink>
       </nav>
 
       <div class="hidden items-center gap-4 md:flex">
@@ -75,7 +75,7 @@ const navLinks = [
 
     <div v-if="open" class="border-t border-divider/70 bg-bg px-6 py-4 md:hidden">
       <nav class="flex flex-col gap-4 text-sm text-ink-muted">
-        <a v-for="link in navLinks" :key="link.href" :href="link.href" @click="open = false">{{ link.label }}</a>
+        <RouterLink v-for="link in navLinks" :key="link.label" :to="link.to" @click="open = false">{{ link.label }}</RouterLink>
         <RouterLink v-if="!auth.isAuthenticated" to="/login" @click="open = false">Вход</RouterLink>
         <RouterLink v-else to="/profile" @click="open = false">Моят профил</RouterLink>
         <RouterLink
