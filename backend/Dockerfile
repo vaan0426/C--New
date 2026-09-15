@@ -1,8 +1,8 @@
 FROM php:8.3-cli
 
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip \
+    git unzip libzip-dev libpq-dev libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql pdo_sqlite zip \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -15,9 +15,11 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
 
 EXPOSE 10000
 
-# Render provides $PORT at runtime; migrate/seed on boot so the demo
-# database is always in a known state, then serve with the built-in
-# dev server (fine for a preview deploy, not for real production traffic).
-CMD php artisan migrate --force \
+# Render provides $PORT at runtime. Uses a local SQLite file (no external
+# DB credentials to manage for a preview deploy) — ephemeral, so it resets
+# on every redeploy/restart; migrate/seed on boot keeps it in a known,
+# always-populated state. Fine for a demo, not for real production traffic.
+CMD mkdir -p database && touch database/database.sqlite \
+    && php artisan migrate --force \
     && (php artisan db:seed --force || true) \
     && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
