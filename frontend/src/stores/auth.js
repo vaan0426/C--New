@@ -5,6 +5,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     token: localStorage.getItem('auth_token') || null,
+    ready: null,
   }),
 
   getters: {
@@ -18,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
       const { data } = await api.post('/login', { email, password })
       this.token = data.token
       this.user = data.user
+      this.ready = Promise.resolve()
       localStorage.setItem('auth_token', data.token)
     },
 
@@ -25,10 +27,24 @@ export const useAuthStore = defineStore('auth', {
       return api.post('/register', payload)
     },
 
-    async fetchUser() {
-      if (!this.token) return
-      const { data } = await api.get('/user')
-      this.user = data
+    // Idempotent: on a hard navigation the router guard needs to await the
+    // same in-flight request fetchUser() kicks off from main.js, rather
+    // than firing (and racing) a second one.
+    fetchUser() {
+      if (!this.token) return Promise.resolve()
+      if (!this.ready) {
+        this.ready = api
+          .get('/user')
+          .then(({ data }) => {
+            this.user = data
+          })
+          .catch(() => {
+            this.token = null
+            this.user = null
+            localStorage.removeItem('auth_token')
+          })
+      }
+      return this.ready
     },
 
     async logout() {
@@ -37,6 +53,7 @@ export const useAuthStore = defineStore('auth', {
       } finally {
         this.token = null
         this.user = null
+        this.ready = null
         localStorage.removeItem('auth_token')
       }
     },
