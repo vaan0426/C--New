@@ -144,8 +144,8 @@ function formatDate(value) {
 
     <!-- 3. За мен -->
     <section id="about" class="mx-auto grid max-w-6xl gap-12 px-6 py-28 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
-      <div class="photo relative photo--2 aspect-[4/5] rounded-sm">
-        <!-- Замени с портрет на психолога, топла светлина, неутрален фон -->
+      <div class="relative aspect-[4/5] overflow-hidden rounded-sm">
+        <img src="/images/about.webp" alt="Портрет" class="h-full w-full object-cover object-top" />
       </div>
       <div>
         <h2 class="font-display text-4xl italic text-cream">За мен</h2>
