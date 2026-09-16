@@ -8,6 +8,7 @@ const slides = [
     quote: 'Стига си слагал маска на страховете си.',
     cta: 'ПРОГРАМА — ОТНОВО АЗ',
     photo: 'photo--1',
+    image: '/images/hero-1.webp',
   },
   {
     quote: 'Споделям значи обичам',
@@ -113,7 +114,14 @@ function formatDate(value) {
         class="absolute inset-0 transition-opacity duration-1000"
         :class="i === activeSlide ? 'opacity-100' : 'opacity-0'"
       >
-        <div class="photo absolute inset-0" :class="[slide.photo, i === activeSlide && 'ken-burns']" />
+        <img
+          v-if="slide.image"
+          :src="slide.image"
+          alt=""
+          class="absolute inset-0 h-full w-full object-cover"
+          :class="i === activeSlide && 'ken-burns'"
+        />
+        <div v-else class="photo absolute inset-0" :class="[slide.photo, i === activeSlide && 'ken-burns']" />
         <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/10 to-transparent" />
         <div class="relative flex h-full items-end">
           <div class="mx-auto w-full max-w-6xl px-6 pb-28">
